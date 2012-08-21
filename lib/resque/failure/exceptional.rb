@@ -105,7 +105,13 @@ module Resque
         # pass any proxy settings.
         proxy = Net::HTTP::Proxy(self.class.proxy_host, self.class.proxy_port,
                                  self.class.proxy_user, self.class.proxy_pass)
-        http = proxy.new('api.getexceptional.com', http_port)
+        
+        if use_ssl?
+          http = proxy.new('exceptional-js.heroku.com', http_port)
+        else
+          http = proxy.new('api.getexceptional.com', http_port)
+        end
+        
 
         # set http client options.
         http.read_timeout = self.class.http_read_timeout || 5
